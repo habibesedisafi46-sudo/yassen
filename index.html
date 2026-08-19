@@ -275,6 +275,28 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
 /* ── NAV LOGO SPIN ── */
 .nav-logo svg { transition: transform 0.5s ease; }
 .nav-logo:hover svg { transform: rotate(12deg) scale(1.1); }
+
+/* ── SECTION DIVIDERS ── */
+.section-divider { position: relative; overflow: hidden; height: 64px; display: flex; align-items: center; justify-content: center; }
+.section-divider::before { content: ''; position: absolute; left: 50%; top: 50%; width: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); transition: width 0.8s ease; transform: translateX(-50%); }
+.section-divider.visible::before { width: 60%; }
+.section-divider .divider-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ash); opacity: 0; transform: scale(0); transition: opacity 0.5s ease 0.4s, transform 0.5s ease 0.4s; position: relative; z-index: 1; }
+.section-divider.visible .divider-dot { opacity: 1; transform: scale(1); }
+
+/* ── PARALLAX SCROLL SECTIONS ── */
+.section { position: relative; }
+.reveal-up { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal-up.visible { opacity: 1; transform: translateY(0); }
+.reveal-fade { opacity: 0; transition: opacity 0.8s ease; }
+.reveal-fade.visible { opacity: 1; }
+
+/* ── SCROLL PROGRESS BAR ── */
+.scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--silver); z-index: 1100; width: 0; transition: width 0.1s linear; }
+[data-theme="light"] .scroll-progress { background: var(--ice); }
+
+/* ── SECTION ZOOM REVEAL ── */
+.zoom-in { opacity: 0; transform: scale(0.95); transition: opacity 0.6s ease, transform 0.6s ease; }
+.zoom-in.visible { opacity: 1; transform: scale(1); }
 </style>
 
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
@@ -289,6 +311,9 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
 </svg>
 
 <div id="page" data-lang="en" data-theme="dark">
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scrollProgress"></div>
 
 <!-- NAV -->
 <nav class="nav" id="navbar">
@@ -355,6 +380,8 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
   </div>
 </section>
 
+<div class="section-divider"><div class="divider-dot"></div></div>
+
 <!-- ABOUT -->
 <section class="section about" id="about">
   <div class="container">
@@ -399,6 +426,8 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
     </div>
   </div>
 </section>
+
+<div class="section-divider"><div class="divider-dot"></div></div>
 
 <!-- SERVICES -->
 <section class="section services" id="services">
@@ -483,6 +512,8 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
   </div>
 </section>
 
+<div class="section-divider"><div class="divider-dot"></div></div>
+
 <!-- OUR WORK -->
 <section class="section portfolio" id="work">
   <div class="container">
@@ -519,6 +550,8 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
   </div>
 </section>
 
+<div class="section-divider"><div class="divider-dot"></div></div>
+
 <!-- WHY US -->
 <section class="section why-us" id="why-us">
   <div class="container">
@@ -551,6 +584,8 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
   </div>
 </section>
 
+<div class="section-divider"><div class="divider-dot"></div></div>
+
 <!-- TESTIMONIALS -->
 <section class="section testimonials" id="testimonials">
   <div class="container">
@@ -577,6 +612,8 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
     </div>
   </div>
 </section>
+
+<div class="section-divider"><div class="divider-dot"></div></div>
 
 <!-- COMING SOON -->
 <section class="section coming-soon" id="coming-soon">
@@ -623,6 +660,8 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
   </div>
 </section>
 
+<div class="section-divider"><div class="divider-dot"></div></div>
+
 <!-- FAQ -->
 <section class="section faq-section" id="faq">
   <div class="container">
@@ -658,6 +697,8 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
     </div>
   </div>
 </section>
+
+<div class="section-divider"><div class="divider-dot"></div></div>
 
 <!-- CONTACT -->
 <section class="section contact" id="contact">
@@ -785,9 +826,16 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
     });
   });
 
-  // Reveal + Stagger
+  // Reveal + Stagger + Dividers
   var obs = new IntersectionObserver(function(e) { e.forEach(function(en) { if (en.isIntersecting) en.target.classList.add('visible'); }); }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-  document.querySelectorAll('.reveal, .stagger').forEach(function(el) { obs.observe(el); });
+  document.querySelectorAll('.reveal, .stagger, .section-divider, .zoom-in, .reveal-up, .reveal-fade').forEach(function(el) { obs.observe(el); });
+
+  // Scroll progress bar
+  window.addEventListener('scroll', function() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? (window.scrollY / h) * 100 : 0;
+    document.getElementById('scrollProgress').style.width = p + '%';
+  });
 
   // FAQ Toggle
   document.querySelectorAll('.faq-q').forEach(function(btn) {
