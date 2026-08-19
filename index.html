@@ -198,6 +198,83 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
 @media (max-width: 1024px) { .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 36px; } .services-grid { grid-template-columns: repeat(2, 1fr); } .portfolio-grid { grid-template-columns: repeat(2, 1fr); } .why-grid { grid-template-columns: repeat(2, 1fr); } .cs-grid { grid-template-columns: repeat(2, 1fr); } .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } .stat-item:nth-child(3)::after { display: none; } }
 @media (max-width: 768px) { .container { padding: 0 20px; } .section { padding: 64px 0; } .nav-inner { padding: 0 20px; } .nav-links { display: none; } .hamburger { display: flex; } .mobile-menu { display: flex; } .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 40px; } .hero p { margin-left: auto; margin-right: auto; } .hero-visual { order: -1; } .hero-logo-wrap { max-width: 220px; margin: 0 auto; } .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; } .stat-item::after { display: none !important; } .services-grid, .portfolio-grid, .cs-grid { grid-template-columns: 1fr; } .why-grid { grid-template-columns: 1fr; } .contact-row { grid-template-columns: 1fr; } .footer-top, .footer-bottom { flex-direction: column; gap: 16px; align-items: center; text-align: center; } }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } * { transition-duration: 0.01ms !important; } }
+
+/* ── LOGO ANIMATION ── */
+.hero-logo-wrap svg { animation: logo-float 4s ease-in-out infinite; }
+@keyframes logo-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+.hero-logo-wrap::after { content: ''; position: absolute; bottom: -10%; left: 15%; right: 15%; height: 20%; background: radial-gradient(ellipse, rgba(128,128,128,0.06) 0%, transparent 70%); animation: logo-shadow 4s ease-in-out infinite; pointer-events: none; border-radius: 50%; }
+@keyframes logo-shadow { 0%, 100% { opacity: 1; transform: scaleX(1); } 50% { opacity: 0.5; transform: scaleX(0.85); } }
+.hero-logo-wrap svg path { opacity: 0; animation: path-draw 0.7s ease forwards; }
+.hero-logo-wrap svg path:nth-child(1) { animation-delay: 0.3s; }
+.hero-logo-wrap svg path:nth-child(2) { animation-delay: 0.45s; }
+.hero-logo-wrap svg path:nth-child(3) { animation-delay: 0.6s; }
+.hero-logo-wrap svg path:nth-child(4) { animation-delay: 0.75s; }
+.hero-logo-wrap svg path:nth-child(5) { animation-delay: 0.9s; }
+.hero-logo-wrap svg path:nth-child(6) { animation-delay: 1.05s; }
+@keyframes path-draw { from { opacity: 0; transform: translateY(-8px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+/* ── HERO TEXT ANIMATION ── */
+.hero-content > * { opacity: 0; animation: hero-in 0.6s ease forwards; }
+.hero-content > *:nth-child(1) { animation-delay: 0.15s; }
+.hero-content > *:nth-child(2) { animation-delay: 0.35s; }
+.hero-content > *:nth-child(3) { animation-delay: 0.5s; }
+.hero-content > *:nth-child(4) { animation-delay: 0.65s; }
+.hero-content > *:nth-child(5) { animation-delay: 0.85s; }
+@keyframes hero-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── STAGGER CHILDREN ── */
+.stagger.visible > * { opacity: 1; transform: none; }
+.stagger > * { opacity: 0; transform: translateY(14px); transition: opacity 0.45s ease, transform 0.45s ease; }
+.stagger.visible > *:nth-child(1) { transition-delay: 0s; }
+.stagger.visible > *:nth-child(2) { transition-delay: 0.07s; }
+.stagger.visible > *:nth-child(3) { transition-delay: 0.14s; }
+.stagger.visible > *:nth-child(4) { transition-delay: 0.21s; }
+.stagger.visible > *:nth-child(5) { transition-delay: 0.28s; }
+.stagger.visible > *:nth-child(6) { transition-delay: 0.35s; }
+.stagger.visible > *:nth-child(7) { transition-delay: 0.42s; }
+.stagger.visible > *:nth-child(8) { transition-delay: 0.49s; }
+
+/* ── CARD HOVER LIFT ── */
+.card-lift { transition: transform 0.35s ease, box-shadow 0.35s ease; }
+.card-lift:hover { transform: translateY(-4px); }
+
+/* ── WHATSAPP FLOAT ── */
+.wa-float { position: fixed; bottom: 24px; right: 24px; z-index: 900; }
+[data-lang="ar"] .wa-float { right: auto; left: 24px; }
+.wa-float a { display: flex; align-items: center; justify-content: center; width: 54px; height: 54px; background: #25D366; border-radius: 50%; box-shadow: 0 4px 16px rgba(37,211,102,0.35); transition: transform 0.3s, box-shadow 0.3s; animation: wa-pulse 2s infinite; }
+.wa-float a:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(37,211,102,0.45); }
+.wa-float svg { width: 28px; height: 28px; fill: #fff; }
+@keyframes wa-pulse { 0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.5); } 70% { box-shadow: 0 0 0 14px rgba(37,211,102,0); } 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); } }
+
+/* ── TESTIMONIALS ── */
+.testimonials { background: var(--abyss); }
+.test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.test-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; transition: border-color var(--tr), transform 0.35s ease; }
+.test-card:hover { border-color: var(--ash); transform: translateY(-4px); }
+[data-theme="light"] .test-card { box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.test-stars { display: flex; gap: 2px; margin-bottom: 14px; }
+.test-stars svg { width: 14px; height: 14px; fill: var(--silver); }
+.test-quote { font-size: 13px; color: var(--fog); line-height: 1.7; margin-bottom: 18px; font-style: italic; }
+.test-author { display: flex; align-items: center; gap: 10px; }
+.test-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--slate); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--fog); flex-shrink: 0; }
+.test-info h5 { font-size: 13px; font-weight: 600; }
+.test-info span { font-size: 11px; color: var(--ash); }
+@media (max-width: 768px) { .test-grid { grid-template-columns: 1fr; } }
+
+/* ── FAQ ── */
+.faq-section { background: var(--void); }
+.faq-list { max-width: 700px; display: flex; flex-direction: column; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-q { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 18px 0; font-size: 14px; font-weight: 600; text-align: left; color: var(--ice); background: none; border: none; cursor: pointer; font-family: inherit; }
+[data-lang="ar"] .faq-q { text-align: right; }
+.faq-q svg { width: 16px; height: 16px; stroke: var(--ash); fill: none; stroke-width: 2; transition: transform 0.3s; flex-shrink: 0; }
+.faq-item.open .faq-q svg { transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.faq-a-inner { padding: 0 0 18px; font-size: 13px; color: var(--fog); line-height: 1.7; }
+
+/* ── NAV LOGO SPIN ── */
+.nav-logo svg { transition: transform 0.5s ease; }
+.nav-logo:hover svg { transform: rotate(12deg) scale(1.1); }
 </style>
 
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
@@ -334,7 +411,7 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
 
     <div class="services-category reveal">
       <div class="services-cat-title"><span class="en">Digital Services</span><span class="ar">الخدمات الرقمية</span></div>
-      <div class="services-grid">
+      <div class="services-grid stagger">
         <div class="service-card">
           <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
           <h3><span class="en">Social Media Management</span><span class="ar">إدارة صفحات التواصل</span></h3>
@@ -365,7 +442,7 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
 
     <div class="services-category reveal">
       <div class="services-cat-title"><span class="en">Offline Advertising</span><span class="ar">الدعاية والإعلان</span></div>
-      <div class="services-grid">
+      <div class="services-grid stagger">
         <div class="service-card">
           <div class="service-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div>
           <h3><span class="en">Printing Services</span><span class="ar">خدمات الطباعة</span></h3>
@@ -449,7 +526,7 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
       <div class="section-eyebrow"><span class="en">Why Us</span><span class="ar">ليه نحن</span></div>
       <h2 class="section-title"><span class="en">Why YDS Media</span><span class="ar">ليه YDS MEDIA؟</span></h2>
     </div>
-    <div class="why-grid reveal">
+    <div class="why-grid reveal stagger">
       <div class="why-card">
         <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
         <h4><span class="en">Creative Thinking</span><span class="ar">تفكير إبداعي</span></h4>
@@ -474,6 +551,33 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
   </div>
 </section>
 
+<!-- TESTIMONIALS -->
+<section class="section testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow"><span class="en">Testimonials</span><span class="ar">آراء العملاء</span></div>
+      <h2 class="section-title"><span class="en">What Our Clients Say</span><span class="ar">إيه رأي عملائنا</span></h2>
+    </div>
+    <div class="test-grid reveal stagger">
+      <div class="test-card">
+        <div class="test-stars"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <p class="test-quote"><span class="en">"YDS MEDIA helped us build our brand from scratch. Professional work and amazing results that exceeded our expectations."</span><span class="ar">"YDS MEDIA ساعدتنا نبني البراند بتاعنا من الصفر. شغل احترافي ونتائج مذهلة فاقت كل توقعاتنا."</span></p>
+        <div class="test-author"><div class="test-avatar">A</div><div class="test-info"><h5><span class="en">Ahmed K.</span><span class="ar">أحمد ك.</span></h5><span><span class="en">Restaurant Owner</span><span class="ar">صاحب مطعم</span></span></div></div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <p class="test-quote"><span class="en">"The best social media management team we've worked with. They truly understand our audience and deliver consistent quality."</span><span class="ar">"أحسن فريق إدارة سوشيال ميديا اشتغلنا معاه. فاهمين جمهورنا فعلاً وبيقدموا جودة ثابتة."</span></p>
+        <div class="test-author"><div class="test-avatar">S</div><div class="test-info"><h5><span class="en">Sara M.</span><span class="ar">سارة م.</span></h5><span><span class="en">Fashion Brand</span><span class="ar">براند أزياء</span></span></div></div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <p class="test-quote"><span class="en">"Their creative designs and printing quality are outstanding. Our event materials looked absolutely premium."</span><span class="ar">"تصميماتهم الإبداعية وجودة الطباعة عندهم ممتازة. مطبوعات الفعالية بتاعتنا كانت شكلها فخم جدًا."</span></p>
+        <div class="test-author"><div class="test-avatar">M</div><div class="test-info"><h5><span class="en">Mohamed R.</span><span class="ar">محمد ر.</span></h5><span><span class="en">Event Organizer</span><span class="ar">منظم فعاليات</span></span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- COMING SOON -->
 <section class="section coming-soon" id="coming-soon">
   <div class="container">
@@ -484,7 +588,7 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
     <div class="cs-intro reveal">
       <p class="section-desc"><span class="en">YDS MEDIA is preparing for its next stage of growth — expanding into media production, media coverage, event coverage, events, and broader communication services.</span><span class="ar">YDS MEDIA بتستعد للمرحلة الجاية من النمو — التوسع في الإنتاج الإعلامي والتغطيات الإعلامية وتغطية الفعاليات والفعاليات وخدمات الاتصالات الأوسع.</span></p>
     </div>
-    <div class="cs-grid reveal">
+    <div class="cs-grid reveal stagger">
       <div class="cs-card">
         <span class="cs-badge"><span class="en">Coming Soon</span><span class="ar">قريبًا</span></span>
         <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></div>
@@ -514,6 +618,42 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
         <span class="cs-badge"><span class="en">Coming Soon</span><span class="ar">قريبًا</span></span>
         <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
         <h4><span class="en">Media Platform</span><span class="ar">منصة إعلامية</span></h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-section" id="faq">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow"><span class="en">FAQ</span><span class="ar">أسئلة شائعة</span></div>
+      <h2 class="section-title"><span class="en">Frequently Asked Questions</span><span class="ar">أسئلة شائعة</span></h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q"><span><span class="en">What services does YDS Media offer?</span><span class="ar">إيه الخدمات اللي YDS Media بتقدمها؟</span></span><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner"><span class="en">We offer digital advertising, social media management, content creation, creative design, digital marketing, and complete offline advertising solutions including printing, apparel, banners, and promotional materials.</span><span class="ar">بنقدم إعلانات رقمية، إدارة سوشيال ميديا، صناعة محتوى، تصميم إبداعي، تسويق رقمي، وحلول دعاية وإعلان كاملة بما فيها الطباعة والملابس والبنرات والمواد الترويجية.</span></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span><span class="en">How long does a project take?</span><span class="ar">المشروع بياخد قد إيه؟</span></span><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner"><span class="en">Project timelines vary based on scope and complexity. Social media packages range from 14 to 90 days. Design and printing projects typically take 3-10 business days. We'll provide a clear timeline before starting.</span><span class="ar">المدة بتختلف حسب حجم المشروع وتعقيده. باقات السوشيال ميديا من 14 لـ 90 يوم. مشاريع التصميم والطباعة عادةً بتاخد 3-10 أيام عمل. هنديلك جدول زمني واضح قبل البداية.</span></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span><span class="en">Do you work with small businesses?</span><span class="ar">بتشتغلوا مع الشركات الصغيرة؟</span></span><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner"><span class="en">Absolutely! We work with businesses of all sizes — from startups and small brands to established companies. Our Starter and Basic packages are specifically designed for small businesses looking to build their digital presence.</span><span class="ar">أكيد! بنشتغل مع شركات بكل الأحجام — من الستارتبات والبراندات الصغيرة للشركات الكبيرة. باقات Starter و Basic مصممة خصيصًا للشركات الصغيرة اللي عايزة تبني حضورها الرقمي.</span></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span><span class="en">What platforms do you manage?</span><span class="ar">إيه المنصات اللي بتديروها؟</span></span><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner"><span class="en">We manage Facebook, Instagram, and TikTok accounts. Our team creates platform-specific content optimized for each audience and algorithm.</span><span class="ar">بندير حسابات فيسبوك وإنستجرام وتيك توك. فريقنا بيعمل محتوى مخصوص لكل منصة ومحسّن لكل جمهور وخوارزمية.</span></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span><span class="en">Do you offer custom packages?</span><span class="ar">بتعملوا باقات مخصصة؟</span></span><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner"><span class="en">Yes! Beyond our standard packages, we can create custom solutions tailored to your brand's specific needs and budget. Contact us to discuss your requirements.</span><span class="ar">أيوا! غير الباقات العادية، نقدر نعملك حلول مخصصة على حسب احتياجات براندك وميزانيتك. تواصل معانا ونتكلم عن اللي محتاجه.</span></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span><span class="en">How do I get started?</span><span class="ar">إزاي أبدأ؟</span></span><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner"><span class="en">Simply choose a package from our shop, fill in your details, and submit your order. Our team will contact you within 24 hours to confirm and get started. You can also reach us directly via WhatsApp or the contact form.</span><span class="ar">ببساطة اختار باقة من المتجر بتاعنا، املأ بياناتك، وابعت الطلب. فريقنا هيتواصل معاك خلال 24 ساعة للتأكيد والبداية. تقدر كمان تتواصل معانا مباشرة عن طريق واتساب أو فورم التواصل.</span></div></div>
       </div>
     </div>
   </div>
@@ -604,6 +744,13 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
   </div>
 </footer>
 
+<!-- WHATSAPP FLOAT -->
+<div class="wa-float">
+  <a href="https://wa.me/20XXXXXXXXXX" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
 </div>
 
 <script>
@@ -638,9 +785,19 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
     });
   });
 
-  // Reveal
+  // Reveal + Stagger
   var obs = new IntersectionObserver(function(e) { e.forEach(function(en) { if (en.isIntersecting) en.target.classList.add('visible'); }); }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+  document.querySelectorAll('.reveal, .stagger').forEach(function(el) { obs.observe(el); });
+
+  // FAQ Toggle
+  document.querySelectorAll('.faq-q').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = this.parentElement;
+      var a = item.querySelector('.faq-a');
+      if (item.classList.contains('open')) { a.style.maxHeight = '0'; item.classList.remove('open'); }
+      else { document.querySelectorAll('.faq-item.open').forEach(function(o){ o.querySelector('.faq-a').style.maxHeight='0'; o.classList.remove('open'); }); a.style.maxHeight = a.scrollHeight + 'px'; item.classList.add('open'); }
+    });
+  });
 
   // Counter animation
   var counted = false;

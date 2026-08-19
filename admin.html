@@ -150,6 +150,10 @@ tbody tr:hover { background: var(--hover); }
         <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         <span>Prices</span>
       </a>
+      <a class="sidebar-link" data-page="offers" onclick="showPage('offers')">
+        <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        <span>Offers</span>
+      </a>
       <a class="sidebar-link" data-page="settings" onclick="showPage('settings')">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         <span>Settings</span>
@@ -199,6 +203,24 @@ tbody tr:hover { background: var(--hover); }
         <div style="margin-top:16px">
           <button class="save-prices-btn" onclick="savePrices()">Save Prices</button>
           <span class="save-msg" id="saveMsg">Saved!</span>
+        </div>
+      </div>
+
+      <!-- OFFERS PAGE -->
+      <div class="page" id="page-offers">
+        <div class="settings-card" style="max-width:100%">
+          <h3>Active Offers</h3>
+          <p style="font-size:12px;color:var(--dim);margin-bottom:16px">Create discount offers for packages. Customers will see the discounted price in the shop.</p>
+          <div id="offersList"></div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+            <h3 style="margin-bottom:12px">Add New Offer</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end">
+              <div><label>Package</label><select id="offerPkg" style="display:block;width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--input-bg);color:var(--text);outline:none"><option value="starter">Starter</option><option value="basic">Basic</option><option value="growth">Growth</option><option value="pro">Pro</option><option value="business">Business</option></select></div>
+              <div><label>Discount %</label><input type="number" id="offerDiscount" placeholder="e.g. 20" min="1" max="99" style="display:block;width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--input-bg);color:var(--text);outline:none"></div>
+              <div><label>Label (EN)</label><input type="text" id="offerLabel" placeholder="e.g. Summer Sale" style="display:block;width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--input-bg);color:var(--text);outline:none"></div>
+              <button class="save-prices-btn" onclick="addOffer()" style="margin:0;height:40px">Add</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -372,9 +394,42 @@ tbody tr:hover { background: var(--hover); }
     URL.revokeObjectURL(url);
   };
 
+  // Offers
+  function getOffers(){ try { return JSON.parse(localStorage.getItem('yds_offers')) || []; } catch(e){ return []; } }
+  function renderOffers(){
+    var offers = getOffers();
+    if(!offers.length){ document.getElementById('offersList').innerHTML='<p style="color:var(--dim);font-size:13px">No active offers</p>'; return; }
+    var h='<table><thead><tr><th>Package</th><th>Discount</th><th>Label</th><th>Action</th></tr></thead><tbody>';
+    offers.forEach(function(o,i){
+      h+='<tr><td style="font-weight:600;text-transform:uppercase">'+esc(o.pkg)+'</td><td>'+o.discount+'%</td><td>'+esc(o.label||'—')+'</td><td><button class="tbl-btn danger" onclick="removeOffer('+i+')">Remove</button></td></tr>';
+    });
+    h+='</tbody></table>';
+    document.getElementById('offersList').innerHTML=h;
+  }
+  window.addOffer = function(){
+    var pkg = document.getElementById('offerPkg').value;
+    var disc = parseInt(document.getElementById('offerDiscount').value);
+    var label = document.getElementById('offerLabel').value;
+    if(!disc || disc<1 || disc>99) return;
+    var offers = getOffers();
+    offers = offers.filter(function(o){return o.pkg!==pkg;});
+    offers.push({pkg:pkg, discount:disc, label:label});
+    localStorage.setItem('yds_offers', JSON.stringify(offers));
+    document.getElementById('offerDiscount').value='';
+    document.getElementById('offerLabel').value='';
+    renderOffers();
+  };
+  window.removeOffer = function(i){
+    var offers = getOffers();
+    offers.splice(i,1);
+    localStorage.setItem('yds_offers', JSON.stringify(offers));
+    renderOffers();
+  };
+
   // Init
   renderOrders();
   renderPrices();
+  renderOffers();
 
   // Live refresh every 5 seconds for new orders
   setInterval(renderOrders, 5000);
