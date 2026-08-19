@@ -431,7 +431,36 @@ tbody tr:hover { background: var(--hover); }
   renderPrices();
   renderOffers();
 
-  // Live refresh every 5 seconds for new orders
-  setInterval(renderOrders, 5000);
+  // Notification sound via Web Audio API
+  var lastOrderCount = getOrders().length;
+  function playNotif() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      [800, 1000, 1200].forEach(function(freq, i) {
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + i * 0.15);
+        osc.stop(ctx.currentTime + i * 0.15 + 0.3);
+      });
+    } catch(e) {}
+  }
+
+  // Live refresh every 5 seconds with notification
+  setInterval(function() {
+    var orders = getOrders();
+    if (orders.length > lastOrderCount) {
+      playNotif();
+      document.title = '(' + (orders.length - lastOrderCount) + ' new) YDS Admin';
+      setTimeout(function() { document.title = 'YDS Admin'; }, 5000);
+    }
+    lastOrderCount = orders.length;
+    renderOrders();
+  }, 5000);
 })();
 </script>
