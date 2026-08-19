@@ -1,234 +1,155 @@
 <title>YDS Shop</title>
 <style>
 :root {
-  --void: #000000;
-  --abyss: #050505;
-  --obsidian: #0D0D0D;
-  --graphite: #151515;
-  --card: #111111;
-  --slate: #222222;
-  --border: #292929;
-  --ash: #555555;
-  --fog: #A0A0A0;
-  --silver: #D5D5D5;
-  --ice: #FFFFFF;
+  --bg: #000000; --bg2: #050505; --card: #111111; --border: #292929;
+  --text: #FFFFFF; --text2: #D5D5D5; --muted: #A0A0A0; --dim: #555555;
+  --hover: #181818; --input-bg: #111111;
   --radius: 6px;
   --tr: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+[data-theme="light"] {
+  --bg: #F5F5F5; --bg2: #FFFFFF; --card: #FFFFFF; --border: #E0E0E0;
+  --text: #111111; --text2: #333333; --muted: #666666; --dim: #999999;
+  --hover: #F0F0F0; --input-bg: #F8F8F8;
+}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--void);
-  color: var(--ice);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 15px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-
+body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 a { color: inherit; text-decoration: none; }
-button { font-family: inherit; cursor: pointer; border: none; background: none; }
-ul { list-style: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea, select { font-family: inherit; font-size: inherit; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+[data-lang="ar"] .en, [data-lang="en"] .ar { display: none !important; }
 
-.container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
-
-/* ── TOP BAR (social + lang) ── */
-.top-bar {
-  background: var(--abyss);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 0;
-}
-.top-bar-inner {
-  display: flex; align-items: center; justify-content: space-between;
-  max-width: 1240px; margin: 0 auto; padding: 0 32px;
-}
+/* ── TOP BAR ── */
+.top-bar { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 8px 0; }
+.top-bar-inner { display: flex; align-items: center; justify-content: space-between; max-width: 1280px; margin: 0 auto; padding: 0 32px; }
 .top-socials { display: flex; gap: 14px; align-items: center; }
-.top-socials a { color: var(--ash); transition: color var(--tr); display: flex; align-items: center; }
-.top-socials a:hover { color: var(--ice); }
+.top-socials a { color: var(--dim); transition: color var(--tr); display: flex; }
+.top-socials a:hover { color: var(--text); }
 .top-socials svg { width: 15px; height: 15px; fill: currentColor; }
-.lang-toggle {
-  display: flex; align-items: center; gap: 6px;
-  padding: 5px 14px; border: 1px solid var(--border); border-radius: 4px;
-  color: var(--fog); font-size: 12px; font-weight: 500; letter-spacing: 0.05em;
-  cursor: pointer; transition: border-color var(--tr), color var(--tr); background: transparent;
-}
-.lang-toggle:hover { border-color: var(--ash); color: var(--ice); }
-.lang-toggle svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.top-controls { display: flex; align-items: center; gap: 10px; }
+.ctrl-btn { display: flex; align-items: center; gap: 6px; padding: 5px 12px; border: 1px solid var(--border); border-radius: 4px; color: var(--muted); font-size: 12px; font-weight: 500; cursor: pointer; transition: border-color var(--tr), color var(--tr); background: transparent; }
+.ctrl-btn:hover { border-color: var(--dim); color: var(--text); }
+.ctrl-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.currency-select { padding: 5px 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--card); color: var(--text); font-size: 12px; font-weight: 500; outline: none; cursor: pointer; }
+.currency-select option { background: var(--card); color: var(--text); }
 
 /* ── NAV ── */
-.nav {
-  position: sticky; top: 0; z-index: 1000;
-  background: rgba(0,0,0,0.92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  padding: 14px 0;
-}
-.nav-inner {
-  display: flex; align-items: center; justify-content: space-between;
-  max-width: 1240px; margin: 0 auto; padding: 0 32px;
-}
+.nav { position: sticky; top: 0; z-index: 1000; background: var(--bg); border-bottom: 1px solid var(--border); padding: 14px 0; backdrop-filter: blur(24px); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; max-width: 1280px; margin: 0 auto; padding: 0 32px; }
 .nav-logo { display: flex; align-items: center; gap: 12px; }
 .nav-logo svg { width: 30px; height: 38px; }
 .nav-logo-text { display: flex; flex-direction: column; line-height: 1; }
 .nav-logo-yds { font-size: 20px; font-weight: 700; letter-spacing: 0.08em; }
-.nav-logo-shop { font-size: 8px; font-weight: 600; letter-spacing: 0.4em; color: var(--fog); margin-top: 2px; }
-.nav-right { display: flex; align-items: center; gap: 20px; }
-.nav-back {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 12px; color: var(--fog); letter-spacing: 0.04em;
-  transition: color var(--tr);
-}
-.nav-back:hover { color: var(--ice); }
-.nav-back svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.nav-logo-shop { font-size: 8px; font-weight: 600; letter-spacing: 0.4em; color: var(--muted); margin-top: 2px; }
+.nav-back { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); transition: color var(--tr); }
+.nav-back:hover { color: var(--text); }
+.nav-back svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
 
 /* ── HERO ── */
-.hero {
-  padding: 80px 0 60px;
-  position: relative; overflow: hidden;
-}
-.hero::before {
-  content: ''; position: absolute; top: -30%; right: -10%; width: 60%; height: 160%;
-  background:
-    linear-gradient(135deg, transparent 40%, rgba(13,13,13,0.8) 40.5%, rgba(13,13,13,0.8) 41%, transparent 41.5%),
-    linear-gradient(125deg, transparent 55%, rgba(10,10,10,0.5) 55.5%, rgba(10,10,10,0.5) 56%, transparent 56.5%);
-  pointer-events: none;
-}
-.hero-content { position: relative; z-index: 2; text-align: center; max-width: 640px; margin: 0 auto; }
-.hero-eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ash); margin-bottom: 12px; }
-.hero h1 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 10px; }
-.hero-sub { font-size: 14px; color: var(--fog); line-height: 1.6; }
+.hero { padding: 72px 0 48px; text-align: center; }
+.hero-eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dim); margin-bottom: 12px; }
+.hero h1 { font-size: clamp(26px, 4vw, 44px); font-weight: 700; line-height: 1.1; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 10px; }
+.hero-sub { font-size: 14px; color: var(--muted); max-width: 500px; margin: 0 auto; }
 .hero-divider { width: 40px; height: 1px; background: var(--border); margin: 24px auto 0; }
 
-[data-lang="ar"] .en { display: none; }
-[data-lang="en"] .ar { display: none; }
-.ar { direction: rtl; }
-
 /* ── PACKAGES ── */
-.packages { padding: 48px 0 96px; }
-.packages-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
-
-.pkg {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  display: flex; flex-direction: column;
-  transition: border-color var(--tr), box-shadow var(--tr);
-  overflow: hidden;
-}
-.pkg:hover { border-color: #333; box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
-
-.pkg-featured { border-color: var(--ash); }
-.pkg-featured .pkg-head { background: linear-gradient(180deg, var(--slate) 0%, var(--card) 100%); }
-
-.pkg-head {
-  padding: 24px 20px 20px;
-  border-bottom: 1px solid var(--border);
-  text-align: center;
-}
-.pkg-badge {
-  display: inline-block; font-size: 9px; font-weight: 600;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 3px 10px; border: 1px solid var(--ash); border-radius: 3px;
-  color: var(--fog); margin-bottom: 12px;
-}
-.pkg-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.03em; }
-.pkg-name-ar { font-size: 13px; color: var(--ash); direction: rtl; }
-.pkg-price { margin-top: 16px; }
-.pkg-amount { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.pkg-period { font-size: 11px; color: var(--ash); letter-spacing: 0.04em; }
-
-.pkg-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-.pkg-features { flex: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.pkg-feature {
-  display: flex; align-items: flex-start; gap: 8px;
-  font-size: 12.5px; color: var(--fog); line-height: 1.5;
-}
-.pkg-feature svg {
-  width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px;
-  stroke: var(--silver); fill: none; stroke-width: 2;
-  stroke-linecap: round; stroke-linejoin: round;
-}
-
-.pkg-cta {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 12px 16px;
-  border: 1px solid var(--ice); color: var(--ice);
-  background: transparent; border-radius: var(--radius);
-  font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-  transition: background var(--tr), box-shadow var(--tr); cursor: pointer;
-}
-.pkg-cta:hover { background: rgba(255,255,255,0.06); box-shadow: 0 0 20px rgba(255,255,255,0.03); }
+.packages { padding: 32px 0 80px; }
+.packages-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.pkg { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; transition: border-color var(--tr), box-shadow var(--tr); overflow: hidden; }
+.pkg:hover { border-color: var(--dim); box-shadow: 0 12px 48px rgba(0,0,0,0.3); }
+.pkg-featured { border-color: var(--muted); }
+[data-theme="light"] .pkg { box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+[data-theme="light"] .pkg:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.pkg-head { padding: 22px 18px 18px; border-bottom: 1px solid var(--border); text-align: center; }
+.pkg-featured .pkg-head { background: linear-gradient(180deg, var(--hover) 0%, var(--card) 100%); }
+.pkg-badge { display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border: 1px solid var(--dim); border-radius: 3px; color: var(--muted); margin-bottom: 10px; }
+.pkg-name { font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.pkg-name-sub { font-size: 12px; color: var(--dim); margin-top: 2px; }
+.pkg-duration { display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; font-size: 11px; color: var(--muted); letter-spacing: 0.03em; }
+.pkg-duration svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.pkg-price { margin-top: 12px; }
+.pkg-amount { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pkg-currency-label { font-size: 11px; color: var(--dim); }
+.pkg-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+.pkg-features { flex: 1; display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.pkg-feature { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: var(--muted); line-height: 1.45; }
+.pkg-feature svg { width: 13px; height: 13px; flex-shrink: 0; margin-top: 1px; stroke: var(--text2); fill: none; stroke-width: 2; }
+.pkg-cta { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 11px 14px; border: 1px solid var(--text); color: var(--text); background: transparent; border-radius: var(--radius); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; transition: background var(--tr), box-shadow var(--tr); cursor: pointer; }
+.pkg-cta:hover { background: rgba(128,128,128,0.1); }
 .pkg-cta svg { width: 12px; height: 12px; }
+.pkg-featured .pkg-cta { background: var(--text); color: var(--bg); border-color: var(--text); }
+.pkg-featured .pkg-cta:hover { opacity: 0.9; }
 
-.pkg-featured .pkg-cta { background: var(--ice); color: var(--void); border-color: var(--ice); }
-.pkg-featured .pkg-cta:hover { background: var(--silver); box-shadow: 0 0 30px rgba(255,255,255,0.08); }
+/* ── STEPS ── */
+.steps-section { padding: 0 0 80px; }
+.steps-header { text-align: center; margin-bottom: 36px; }
+.steps-header h2 { font-size: clamp(20px, 3vw, 30px); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+.steps-header p { font-size: 13px; color: var(--dim); }
+.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 900px; margin: 0 auto; }
+.step { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 18px; text-align: center; }
+.step-num { width: 32px; height: 32px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--dim); border-radius: 50%; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.step h4 { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.step p { font-size: 11px; color: var(--dim); line-height: 1.5; }
 
-/* ── INVOICE SECTION ── */
-.invoice-section { padding: 0 0 96px; }
-.invoice-header { text-align: center; margin-bottom: 40px; }
-.invoice-header h2 { font-size: clamp(22px, 3vw, 32px); font-weight: 700; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 6px; }
-.invoice-header p { font-size: 13px; color: var(--ash); }
-
-.invoice-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 900px; margin: 0 auto; }
-.inv-step {
-  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 24px 20px; text-align: center;
-  transition: border-color var(--tr);
-}
-.inv-step:hover { border-color: #333; }
-.inv-step-num {
-  width: 36px; height: 36px; margin: 0 auto 14px;
-  display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--ash); border-radius: 50%;
-  font-size: 14px; font-weight: 700; color: var(--silver);
-  font-variant-numeric: tabular-nums;
-}
-.inv-step h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-.inv-step p { font-size: 11.5px; color: var(--ash); line-height: 1.5; }
+/* ── CHECKOUT MODAL ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--card); border: 1px solid var(--border); border-radius: 8px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+.modal-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+.modal-head h3 { font-size: 16px; font-weight: 700; }
+.modal-close { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: background var(--tr); }
+.modal-close:hover { background: var(--hover); }
+.modal-close svg { width: 16px; height: 16px; stroke: var(--muted); fill: none; stroke-width: 2; }
+.modal-body { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.modal-pkg-info { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
+.modal-pkg-name { font-size: 14px; font-weight: 600; }
+.modal-pkg-price { font-size: 14px; font-weight: 700; }
+.modal-body input, .modal-body textarea { background: var(--input-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 11px 14px; color: var(--text); font-size: 13px; outline: none; width: 100%; transition: border-color var(--tr); resize: none; }
+.modal-body input::placeholder, .modal-body textarea::placeholder { color: var(--dim); }
+.modal-body input:focus, .modal-body textarea:focus { border-color: var(--dim); }
+.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-submit { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; border: 1px solid var(--text); color: var(--text); background: transparent; border-radius: var(--radius); font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: background var(--tr); margin-top: 4px; }
+.modal-submit:hover { background: rgba(128,128,128,0.1); }
+.modal-success { text-align: center; padding: 40px 24px; }
+.modal-success svg { width: 48px; height: 48px; stroke: var(--text2); fill: none; stroke-width: 1.5; margin-bottom: 16px; }
+.modal-success h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.modal-success p { font-size: 13px; color: var(--muted); }
 
 /* ── FOOTER ── */
-.footer { background: var(--void); border-top: 1px solid var(--border); padding: 40px 0 28px; }
+.footer { background: var(--bg); border-top: 1px solid var(--border); padding: 36px 0 24px; }
 .footer-inner { display: flex; align-items: center; justify-content: space-between; }
 .footer-left { display: flex; align-items: center; gap: 12px; }
-.footer-left svg { width: 26px; height: 34px; }
+.footer-left svg { width: 24px; height: 30px; }
 .footer-left-text { line-height: 1; }
-.footer-left-yds { font-size: 16px; font-weight: 700; letter-spacing: 0.08em; color: var(--silver); display: block; }
-.footer-left-shop { font-size: 7px; font-weight: 600; letter-spacing: 0.35em; color: var(--ash); margin-top: 2px; display: block; }
-.footer-center { font-size: 11px; color: var(--ash); text-align: center; }
+.footer-left-yds { font-size: 15px; font-weight: 700; letter-spacing: 0.08em; display: block; }
+.footer-left-shop { font-size: 7px; font-weight: 600; letter-spacing: 0.3em; color: var(--dim); margin-top: 2px; display: block; }
+.footer-center { font-size: 11px; color: var(--dim); }
 .footer-socials { display: flex; gap: 14px; }
-.footer-socials a { color: var(--fog); transition: color var(--tr); display: flex; align-items: center; }
-.footer-socials a:hover { color: var(--ice); }
+.footer-socials a { color: var(--muted); transition: color var(--tr); display: flex; }
+.footer-socials a:hover { color: var(--text); }
 .footer-socials svg { width: 16px; height: 16px; fill: currentColor; }
 
 /* ── REVEAL ── */
-.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 1100px) {
-  .packages-grid { grid-template-columns: repeat(3, 1fr); }
-}
+@media (max-width: 1100px) { .packages-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 768px) {
-  .container { padding: 0 20px; }
-  .top-bar-inner, .nav-inner { padding: 0 20px; }
-  .packages-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
-  .invoice-steps { grid-template-columns: repeat(2, 1fr); }
-  .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
-  .hero { padding: 60px 0 40px; }
+  .container { padding: 0 16px; }
+  .top-bar-inner, .nav-inner { padding: 0 16px; }
+  .packages-grid { grid-template-columns: 1fr; max-width: 380px; margin: 0 auto; }
+  .steps-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { flex-direction: column; gap: 14px; text-align: center; }
+  .modal-row { grid-template-columns: 1fr; }
+  .hero { padding: 48px 0 32px; }
 }
-@media (max-width: 480px) {
-  .invoice-steps { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
-  * { transition-duration: 0.01ms !important; }
-}
+@media (max-width: 480px) { .steps-grid { grid-template-columns: 1fr; max-width: 300px; margin: 0 auto; } .top-controls { gap: 6px; } .ctrl-btn { padding: 4px 8px; font-size: 11px; } }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } * { transition-duration: 0.01ms !important; } }
 </style>
 
-<!-- SHARED SVG DEFS -->
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
   <defs>
     <linearGradient id="yg1" x1="0" y1="0" x2="0.8" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#888"/></linearGradient>
@@ -240,37 +161,32 @@ ul { list-style: none; }
   </defs>
 </svg>
 
-<div id="page" data-lang="en">
+<div id="page" data-lang="en" data-theme="dark">
 
 <!-- TOP BAR -->
 <div class="top-bar">
   <div class="top-bar-inner">
     <div class="top-socials">
-      <a href="https://www.facebook.com/profile.php?id=61593171355801" aria-label="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-      <a href="https://www.instagram.com/yds__media/" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/></svg></a>
-      <a href="https://www.tiktok.com/@yds_media" aria-label="TikTok" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.88 2.89 2.89 0 0 1 2.88-2.88c.28 0 .55.04.8.1V9.02a6.37 6.37 0 0 0-.8-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.98a8.21 8.21 0 0 0 4.76 1.52V7.06a4.84 4.84 0 0 1-1-.37z"/></svg></a>
+      <a href="https://www.facebook.com/profile.php?id=61593171355801" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+      <a href="https://www.instagram.com/yds__media/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/></svg></a>
+      <a href="https://www.tiktok.com/@yds_media" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.88 2.89 2.89 0 0 1 2.88-2.88c.28 0 .55.04.8.1V9.02a6.37 6.37 0 0 0-.8-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.98a8.21 8.21 0 0 0 4.76 1.52V7.06a4.84 4.84 0 0 1-1-.37z"/></svg></a>
     </div>
-    <button class="lang-toggle" id="langToggle" aria-label="Toggle language">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <span id="langLabel">عربي</span>
-    </button>
+    <div class="top-controls">
+      <select class="currency-select" id="currencySelect"><option value="EGP">EGP</option><option value="USD">USD</option><option value="SAR">SAR</option><option value="AED">AED</option><option value="EUR">EUR</option></select>
+      <button class="ctrl-btn" id="langToggle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span id="langLabel">عربي</span></button>
+      <button class="ctrl-btn" id="themeToggle"><svg viewBox="0 0 24 24" id="themeIcon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+    </div>
   </div>
 </div>
 
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo" aria-label="YDS Shop">
+    <a href="index.html" class="nav-logo">
       <svg viewBox="0 0 220 290" fill="none"><path d="M110,130 L15,6 L58,4 L110,115Z" fill="url(#yg1)"/><path d="M110,130 L58,4 L90,24 L110,115Z" fill="url(#yg2)"/><path d="M110,130 L205,6 L162,4 L110,115Z" fill="url(#yg3)"/><path d="M110,130 L162,4 L130,24 L110,115Z" fill="url(#yg4)"/><path d="M110,130 C106,165 96,210 82,280 L100,283 C106,218 109,168 110,130Z" fill="url(#yg5)"/><path d="M110,130 C109,168 106,218 100,283 L120,280 C114,218 112,168 110,130Z" fill="url(#yg6)"/></svg>
       <div class="nav-logo-text"><span class="nav-logo-yds">YDS</span><span class="nav-logo-shop">SHOP</span></div>
     </a>
-    <div class="nav-right">
-      <a href="index.html" class="nav-back">
-        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        <span class="en">Back to Website</span>
-        <span class="ar">العودة للموقع</span>
-      </a>
-    </div>
+    <a href="index.html" class="nav-back"><svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span class="en">Back to Website</span><span class="ar">العودة للموقع</span></a>
   </div>
 </nav>
 
@@ -279,14 +195,8 @@ ul { list-style: none; }
   <div class="container">
     <div class="hero-content reveal">
       <div class="hero-eyebrow">YDS SHOP</div>
-      <h1>
-        <span class="en">Choose Your Package</span>
-        <span class="ar">اختار باقتك</span>
-      </h1>
-      <p class="hero-sub">
-        <span class="en">Professional advertising and creative packages designed to grow your brand. Select the plan that fits your goals.</span>
-        <span class="ar" style="display:none">باقات إعلانية وإبداعية احترافية مصممة لنمو البراند بتاعك. اختار الخطة المناسبة لأهدافك.</span>
-      </p>
+      <h1><span class="en">Choose Your Package</span><span class="ar">اختار باقتك</span></h1>
+      <p class="hero-sub"><span class="en">Professional social media management packages. Select the plan that fits your brand.</span><span class="ar">باقات إدارة سوشيال ميديا احترافية. اختار الخطة المناسبة لبراندك.</span></p>
       <div class="hero-divider"></div>
     </div>
   </div>
@@ -297,184 +207,113 @@ ul { list-style: none; }
   <div class="container">
     <div class="packages-grid">
 
-      <!-- Package 1: Starter -->
-      <div class="pkg reveal">
+      <!-- 01 STARTER -->
+      <div class="pkg reveal" data-pkg="starter">
         <div class="pkg-head">
-          <div class="pkg-name">
-            <span class="en">Starter</span>
-            <span class="ar">بداية</span>
-          </div>
-          <div class="pkg-name-ar">
-            <span class="en">بداية</span>
-            <span class="ar">Starter</span>
-          </div>
-          <div class="pkg-price">
-            <div class="pkg-amount">---</div>
-            <div class="pkg-period">
-              <span class="en">Price coming soon</span>
-              <span class="ar">السعر قريبًا</span>
-            </div>
-          </div>
+          <div class="pkg-name"><span class="en">Starter</span><span class="ar">البداية</span></div>
+          <div class="pkg-name-sub"><span class="en">البداية</span><span class="ar">Starter</span></div>
+          <div class="pkg-duration"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="en">14 Days</span><span class="ar">14 يوم</span></div>
+          <div class="pkg-price"><div class="pkg-amount" data-price-key="starter">---</div><div class="pkg-currency-label"></div></div>
         </div>
         <div class="pkg-body">
           <div class="pkg-features">
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Social media setup</span><span class="ar">إعداد صفحات التواصل</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Basic content creation</span><span class="ar">صناعة محتوى أساسي</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Logo design</span><span class="ar">تصميم لوجو</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">5 design posts</span><span class="ar">5 بوستات تصميم</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">FB + IG + TikTok Management</span><span class="ar">إدارة فيسبوك + إنستجرام + تيك توك</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">6 Posts</span><span class="ar">6 بوستات</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">2 Videos</span><span class="ar">2 فيديو</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">1 Photo Session</span><span class="ar">جلسة تصوير</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Content Writing</span><span class="ar">كتابة المحتوى</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Ad Management</span><span class="ar">إدارة الإعلانات</span></div>
           </div>
-          <button class="pkg-cta">
-            <span class="en">Get Started</span>
-            <span class="ar">ابدأ الآن</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </button>
+          <button class="pkg-cta" onclick="openCheckout('starter')"><span class="en">Get Started</span><span class="ar">ابدأ الآن</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
         </div>
       </div>
 
-      <!-- Package 2: Basic -->
-      <div class="pkg reveal">
+      <!-- 02 BASIC -->
+      <div class="pkg reveal" data-pkg="basic">
         <div class="pkg-head">
-          <div class="pkg-name">
-            <span class="en">Basic</span>
-            <span class="ar">أساسي</span>
-          </div>
-          <div class="pkg-name-ar">
-            <span class="en">أساسي</span>
-            <span class="ar">Basic</span>
-          </div>
-          <div class="pkg-price">
-            <div class="pkg-amount">---</div>
-            <div class="pkg-period">
-              <span class="en">Price coming soon</span>
-              <span class="ar">السعر قريبًا</span>
-            </div>
-          </div>
+          <div class="pkg-name"><span class="en">Basic</span><span class="ar">الأساسية</span></div>
+          <div class="pkg-name-sub"><span class="en">الأساسية</span><span class="ar">Basic</span></div>
+          <div class="pkg-duration"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="en">30 Days</span><span class="ar">30 يوم</span></div>
+          <div class="pkg-price"><div class="pkg-amount" data-price-key="basic">---</div><div class="pkg-currency-label"></div></div>
         </div>
         <div class="pkg-body">
           <div class="pkg-features">
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Social media management</span><span class="ar">إدارة صفحات التواصل</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">10 design posts/month</span><span class="ar">10 بوستات تصميم/شهر</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Content calendar</span><span class="ar">خطة محتوى</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Basic ad campaign</span><span class="ar">حملة إعلانية أساسية</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Monthly report</span><span class="ar">تقرير شهري</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">FB + IG + TikTok Management</span><span class="ar">إدارة فيسبوك + إنستجرام + تيك توك</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">10 Posts</span><span class="ar">10 بوستات</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">4 Videos</span><span class="ar">4 فيديوهات</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">1 Photo Session</span><span class="ar">جلسة تصوير</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Content Writing</span><span class="ar">كتابة المحتوى</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Ads Management</span><span class="ar">إدارة الإعلانات</span></div>
           </div>
-          <button class="pkg-cta">
-            <span class="en">Get Started</span>
-            <span class="ar">ابدأ الآن</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </button>
+          <button class="pkg-cta" onclick="openCheckout('basic')"><span class="en">Get Started</span><span class="ar">ابدأ الآن</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
         </div>
       </div>
 
-      <!-- Package 3: Professional (Featured) -->
-      <div class="pkg pkg-featured reveal">
+      <!-- 03 GROWTH (Featured) -->
+      <div class="pkg pkg-featured reveal" data-pkg="growth">
         <div class="pkg-head">
-          <div class="pkg-badge">
-            <span class="en">Most Popular</span>
-            <span class="ar">الأكثر طلبًا</span>
-          </div>
-          <div class="pkg-name">
-            <span class="en">Professional</span>
-            <span class="ar">احترافي</span>
-          </div>
-          <div class="pkg-name-ar">
-            <span class="en">احترافي</span>
-            <span class="ar">Professional</span>
-          </div>
-          <div class="pkg-price">
-            <div class="pkg-amount">---</div>
-            <div class="pkg-period">
-              <span class="en">Price coming soon</span>
-              <span class="ar">السعر قريبًا</span>
-            </div>
-          </div>
+          <div class="pkg-badge"><span class="en">Most Popular</span><span class="ar">الأكثر طلبًا</span></div>
+          <div class="pkg-name"><span class="en">Growth</span><span class="ar">النمو</span></div>
+          <div class="pkg-name-sub"><span class="en">النمو</span><span class="ar">Growth</span></div>
+          <div class="pkg-duration"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="en">30 Days</span><span class="ar">30 يوم</span></div>
+          <div class="pkg-price"><div class="pkg-amount" data-price-key="growth">---</div><div class="pkg-currency-label"></div></div>
         </div>
         <div class="pkg-body">
           <div class="pkg-features">
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Full social media management</span><span class="ar">إدارة كاملة للسوشيال ميديا</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">20 design posts/month</span><span class="ar">20 بوست تصميم/شهر</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Video content (Reels/TikTok)</span><span class="ar">محتوى فيديو (Reels/TikTok)</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Ad campaign management</span><span class="ar">إدارة حملات إعلانية</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Brand identity design</span><span class="ar">تصميم هوية بصرية</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Weekly reports</span><span class="ar">تقارير أسبوعية</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">FB + IG + TikTok Management</span><span class="ar">إدارة فيسبوك + إنستجرام + تيك توك</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">14 Posts</span><span class="ar">14 بوست</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">8 Videos</span><span class="ar">8 فيديوهات</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">2 Photo Sessions</span><span class="ar">جلستين تصوير</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Content Writing</span><span class="ar">كتابة المحتوى</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Ads Management</span><span class="ar">إدارة الإعلانات</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Performance Analysis</span><span class="ar">تحليل النتائج</span></div>
           </div>
-          <button class="pkg-cta">
-            <span class="en">Get Started</span>
-            <span class="ar">ابدأ الآن</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </button>
+          <button class="pkg-cta" onclick="openCheckout('growth')"><span class="en">Get Started</span><span class="ar">ابدأ الآن</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
         </div>
       </div>
 
-      <!-- Package 4: Business -->
-      <div class="pkg reveal">
+      <!-- 04 PRO -->
+      <div class="pkg reveal" data-pkg="pro">
         <div class="pkg-head">
-          <div class="pkg-name">
-            <span class="en">Business</span>
-            <span class="ar">أعمال</span>
-          </div>
-          <div class="pkg-name-ar">
-            <span class="en">أعمال</span>
-            <span class="ar">Business</span>
-          </div>
-          <div class="pkg-price">
-            <div class="pkg-amount">---</div>
-            <div class="pkg-period">
-              <span class="en">Price coming soon</span>
-              <span class="ar">السعر قريبًا</span>
-            </div>
-          </div>
+          <div class="pkg-name"><span class="en">Pro</span><span class="ar">الاحتراف</span></div>
+          <div class="pkg-name-sub"><span class="en">الاحتراف</span><span class="ar">Pro</span></div>
+          <div class="pkg-duration"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="en">60 Days</span><span class="ar">60 يوم</span></div>
+          <div class="pkg-price"><div class="pkg-amount" data-price-key="pro">---</div><div class="pkg-currency-label"></div></div>
         </div>
         <div class="pkg-body">
           <div class="pkg-features">
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Everything in Professional</span><span class="ar">كل حاجة في الاحترافي</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">30+ design posts/month</span><span class="ar">+30 بوست تصميم/شهر</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Multi-platform ad campaigns</span><span class="ar">حملات إعلانية متعددة المنصات</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Printing & promotional materials</span><span class="ar">مطبوعات ومواد دعائية</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Dedicated account manager</span><span class="ar">مدير حساب مخصص</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Priority support</span><span class="ar">دعم أولوية</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">FB + IG + TikTok Management</span><span class="ar">إدارة فيسبوك + إنستجرام + تيك توك</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">20 Posts</span><span class="ar">20 بوست</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">12 Videos</span><span class="ar">12 فيديو</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">3 Photo Sessions</span><span class="ar">3 جلسات تصوير</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Content Writing</span><span class="ar">كتابة المحتوى</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Ads Management</span><span class="ar">إدارة الإعلانات</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Competitor Analysis</span><span class="ar">تحليل المنافسين</span></div>
           </div>
-          <button class="pkg-cta">
-            <span class="en">Get Started</span>
-            <span class="ar">ابدأ الآن</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </button>
+          <button class="pkg-cta" onclick="openCheckout('pro')"><span class="en">Get Started</span><span class="ar">ابدأ الآن</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
         </div>
       </div>
 
-      <!-- Package 5: Enterprise -->
-      <div class="pkg reveal">
+      <!-- 05 BUSINESS -->
+      <div class="pkg reveal" data-pkg="business">
         <div class="pkg-head">
-          <div class="pkg-name">
-            <span class="en">Enterprise</span>
-            <span class="ar">مؤسسي</span>
-          </div>
-          <div class="pkg-name-ar">
-            <span class="en">مؤسسي</span>
-            <span class="ar">Enterprise</span>
-          </div>
-          <div class="pkg-price">
-            <div class="pkg-amount">---</div>
-            <div class="pkg-period">
-              <span class="en">Custom pricing</span>
-              <span class="ar">سعر مخصص</span>
-            </div>
-          </div>
+          <div class="pkg-name"><span class="en">Business</span><span class="ar">الأعمال</span></div>
+          <div class="pkg-name-sub"><span class="en">الأعمال</span><span class="ar">Business</span></div>
+          <div class="pkg-duration"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="en">90 Days</span><span class="ar">90 يوم</span></div>
+          <div class="pkg-price"><div class="pkg-amount" data-price-key="business">---</div><div class="pkg-currency-label"></div></div>
         </div>
         <div class="pkg-body">
           <div class="pkg-features">
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Everything in Business</span><span class="ar">كل حاجة في الأعمال</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Unlimited designs</span><span class="ar">تصميمات غير محدودة</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Full digital marketing strategy</span><span class="ar">استراتيجية تسويق رقمي كاملة</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Event coverage & production</span><span class="ar">تغطية وإنتاج فعاليات</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Complete brand management</span><span class="ar">إدارة كاملة للبراند</span></div>
-            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">24/7 dedicated support</span><span class="ar">دعم مخصص 24/7</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">FB + IG + TikTok Management</span><span class="ar">إدارة فيسبوك + إنستجرام + تيك توك</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">30 Posts</span><span class="ar">30 بوست</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">20 Videos</span><span class="ar">20 فيديو</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">4 Photo Sessions</span><span class="ar">4 جلسات تصوير</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Ad Content Production</span><span class="ar">إنتاج محتوى إعلاني</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Full Ads Management</span><span class="ar">إدارة الإعلانات بالكامل</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Marketing Strategy</span><span class="ar">استراتيجية تسويقية</span></div>
+            <div class="pkg-feature"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="en">Market Analysis</span><span class="ar">تحليل السوق</span></div>
           </div>
-          <button class="pkg-cta">
-            <span class="en">Contact Us</span>
-            <span class="ar">تواصل معنا</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </button>
+          <button class="pkg-cta" onclick="openCheckout('business')"><span class="en">Get Started</span><span class="ar">ابدأ الآن</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
         </div>
       </div>
 
@@ -482,40 +321,18 @@ ul { list-style: none; }
   </div>
 </section>
 
-<!-- HOW IT WORKS / INVOICE -->
-<section class="invoice-section">
+<!-- STEPS -->
+<section class="steps-section">
   <div class="container">
-    <div class="invoice-header reveal">
-      <h2>
-        <span class="en">How It Works</span>
-        <span class="ar">إزاي الموضوع بيشتغل</span>
-      </h2>
-      <p>
-        <span class="en">Simple process from choosing your package to getting your invoice</span>
-        <span class="ar">عملية بسيطة من اختيار الباقة لحد ما تستلم الفاتورة</span>
-      </p>
+    <div class="steps-header reveal">
+      <h2><span class="en">How It Works</span><span class="ar">إزاي بيشتغل</span></h2>
+      <p><span class="en">From choosing your package to starting work</span><span class="ar">من اختيار الباقة لبداية الشغل</span></p>
     </div>
-    <div class="invoice-steps reveal">
-      <div class="inv-step">
-        <div class="inv-step-num">1</div>
-        <h4><span class="en">Choose Package</span><span class="ar">اختار الباقة</span></h4>
-        <p><span class="en">Select the plan that fits your brand needs</span><span class="ar">اختار الخطة المناسبة لاحتياجات البراند بتاعك</span></p>
-      </div>
-      <div class="inv-step">
-        <div class="inv-step-num">2</div>
-        <h4><span class="en">Get Quote</span><span class="ar">استلم العرض</span></h4>
-        <p><span class="en">We prepare a detailed proposal and pricing</span><span class="ar">هنجهزلك عرض تفصيلي بالسعر</span></p>
-      </div>
-      <div class="inv-step">
-        <div class="inv-step-num">3</div>
-        <h4><span class="en">Confirm & Pay</span><span class="ar">تأكيد ودفع</span></h4>
-        <p><span class="en">Approve the quote and receive your invoice</span><span class="ar">وافق على العرض واستلم الفاتورة</span></p>
-      </div>
-      <div class="inv-step">
-        <div class="inv-step-num">4</div>
-        <h4><span class="en">We Deliver</span><span class="ar">نسلمك الشغل</span></h4>
-        <p><span class="en">Our team starts working and delivers on time</span><span class="ar">فريقنا يبدأ الشغل ويسلمك في الوقت</span></p>
-      </div>
+    <div class="steps-grid reveal">
+      <div class="step"><div class="step-num">1</div><h4><span class="en">Choose</span><span class="ar">اختار</span></h4><p><span class="en">Pick the package that fits your brand</span><span class="ar">اختار الباقة المناسبة لبراندك</span></p></div>
+      <div class="step"><div class="step-num">2</div><h4><span class="en">Order</span><span class="ar">اطلب</span></h4><p><span class="en">Fill in your details and submit</span><span class="ar">املأ بياناتك وابعت الطلب</span></p></div>
+      <div class="step"><div class="step-num">3</div><h4><span class="en">Confirm</span><span class="ar">تأكيد</span></h4><p><span class="en">We review and send your invoice</span><span class="ar">هنراجع ونبعتلك الفاتورة</span></p></div>
+      <div class="step"><div class="step-num">4</div><h4><span class="en">Start</span><span class="ar">نبدأ</span></h4><p><span class="en">Work begins immediately after payment</span><span class="ar">الشغل يبدأ فورًا بعد الدفع</span></p></div>
     </div>
   </div>
 </section>
@@ -528,11 +345,11 @@ ul { list-style: none; }
         <svg viewBox="0 0 220 290" fill="none"><path d="M110,130 L15,6 L58,4 L110,115Z" fill="#aaa"/><path d="M110,130 L58,4 L90,24 L110,115Z" fill="#444"/><path d="M110,130 L205,6 L162,4 L110,115Z" fill="#aaa"/><path d="M110,130 L162,4 L130,24 L110,115Z" fill="#444"/><path d="M110,130 C106,165 96,210 82,280 L100,283 C106,218 109,168 110,130Z" fill="#888"/><path d="M110,130 C109,168 106,218 100,283 L120,280 C114,218 112,168 110,130Z" fill="#333"/></svg>
         <div class="footer-left-text"><span class="footer-left-yds">YDS</span><span class="footer-left-shop">SHOP</span></div>
       </div>
-      <div class="footer-center">&copy; 2026 YDS MEDIA. All Rights Reserved.</div>
+      <div class="footer-center">&copy; 2026 YDS MEDIA</div>
       <div class="footer-socials">
-        <a href="https://www.facebook.com/profile.php?id=61593171355801" aria-label="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-        <a href="https://www.instagram.com/yds__media/" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/></svg></a>
-        <a href="https://www.tiktok.com/@yds_media" aria-label="TikTok" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.88 2.89 2.89 0 0 1 2.88-2.88c.28 0 .55.04.8.1V9.02a6.37 6.37 0 0 0-.8-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.98a8.21 8.21 0 0 0 4.76 1.52V7.06a4.84 4.84 0 0 1-1-.37z"/></svg></a>
+        <a href="https://www.facebook.com/profile.php?id=61593171355801" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="https://www.instagram.com/yds__media/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2"/></svg></a>
+        <a href="https://www.tiktok.com/@yds_media" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.88 2.89 2.89 0 0 1 2.88-2.88c.28 0 .55.04.8.1V9.02a6.37 6.37 0 0 0-.8-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.98a8.21 8.21 0 0 0 4.76 1.52V7.06a4.84 4.84 0 0 1-1-.37z"/></svg></a>
       </div>
     </div>
   </div>
@@ -540,28 +357,133 @@ ul { list-style: none; }
 
 </div>
 
-<script>
-(function() {
-  var page = document.getElementById('page');
-  var langToggle = document.getElementById('langToggle');
-  var langLabel = document.getElementById('langLabel');
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <div id="checkoutForm">
+      <div class="modal-head">
+        <h3><span class="en">Complete Your Order</span><span class="ar">أكمل طلبك</span></h3>
+        <button class="modal-close" onclick="closeCheckout()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-pkg-info"><span class="modal-pkg-name" id="modalPkgName"></span><span class="modal-pkg-price" id="modalPkgPrice"></span></div>
+        <div class="modal-row">
+          <input type="text" id="orderName" placeholder="Full Name — الاسم">
+          <input type="text" id="orderCompany" placeholder="Brand — البراند">
+        </div>
+        <div class="modal-row">
+          <input type="email" id="orderEmail" placeholder="Email — الإيميل">
+          <input type="tel" id="orderPhone" placeholder="Phone — الموبايل">
+        </div>
+        <textarea id="orderNotes" placeholder="Notes — ملاحظات" rows="3"></textarea>
+        <button class="modal-submit" onclick="submitOrder()"><span class="en">Submit Order</span><span class="ar">إرسال الطلب</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg></button>
+      </div>
+    </div>
+    <div id="checkoutSuccess" style="display:none">
+      <div class="modal-head">
+        <h3><span class="en">Order Sent</span><span class="ar">تم الإرسال</span></h3>
+        <button class="modal-close" onclick="closeCheckout()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-success">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11.5 14.5 16 9"/></svg>
+        <h3><span class="en">Thank you!</span><span class="ar">شكرًا!</span></h3>
+        <p><span class="en">Your order has been received. We will contact you shortly.</span><span class="ar">تم استلام طلبك. هنتواصل معاك قريبًا.</span></p>
+      </div>
+    </div>
+  </div>
+</div>
 
-  langToggle.addEventListener('click', function() {
-    var current = page.getAttribute('data-lang');
-    if (current === 'en') {
-      page.setAttribute('data-lang', 'ar');
-      langLabel.textContent = 'English';
-    } else {
-      page.setAttribute('data-lang', 'en');
-      langLabel.textContent = 'عربي';
-    }
+<script>
+(function(){
+  var page = document.getElementById('page');
+  var currentPkg = '';
+  var PKG_NAMES = { starter:'Starter',basic:'Basic',growth:'Growth',pro:'Pro',business:'Business' };
+  var PKG_NAMES_AR = { starter:'البداية',basic:'الأساسية',growth:'النمو',pro:'الاحتراف',business:'الأعمال' };
+
+  function getStoredPrices() {
+    try { return JSON.parse(localStorage.getItem('yds_prices')) || {}; } catch(e) { return {}; }
+  }
+  function getCurrency() { return document.getElementById('currencySelect').value; }
+  function updatePrices() {
+    var prices = getStoredPrices();
+    var cur = getCurrency();
+    document.querySelectorAll('[data-price-key]').forEach(function(el) {
+      var key = el.getAttribute('data-price-key');
+      var p = prices[key] && prices[key][cur];
+      el.textContent = p ? p.toLocaleString() + ' ' + cur : '---';
+    });
+  }
+
+  document.getElementById('currencySelect').addEventListener('change', updatePrices);
+  updatePrices();
+
+  // Language toggle
+  document.getElementById('langToggle').addEventListener('click', function() {
+    var lang = page.getAttribute('data-lang') === 'en' ? 'ar' : 'en';
+    page.setAttribute('data-lang', lang);
+    document.getElementById('checkoutModal').setAttribute('data-lang', lang);
+    document.getElementById('langLabel').textContent = lang === 'en' ? 'عربي' : 'English';
+  });
+  document.getElementById('checkoutModal').setAttribute('data-lang', 'en');
+
+  // Theme toggle
+  document.getElementById('themeToggle').addEventListener('click', function() {
+    var t = page.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    page.setAttribute('data-theme', t);
+    document.getElementById('themeIcon').innerHTML = t === 'dark'
+      ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+      : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
   });
 
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(en) {
-      if (en.isIntersecting) en.target.classList.add('visible');
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+  // Checkout
+  window.openCheckout = function(pkg) {
+    currentPkg = pkg;
+    var lang = page.getAttribute('data-lang');
+    var name = lang === 'ar' ? PKG_NAMES_AR[pkg] : PKG_NAMES[pkg];
+    var prices = getStoredPrices();
+    var cur = getCurrency();
+    var p = prices[pkg] && prices[pkg][cur];
+    document.getElementById('modalPkgName').textContent = name;
+    document.getElementById('modalPkgPrice').textContent = p ? p.toLocaleString() + ' ' + cur : '---';
+    document.getElementById('checkoutForm').style.display = '';
+    document.getElementById('checkoutSuccess').style.display = 'none';
+    document.getElementById('checkoutModal').classList.add('open');
+    document.getElementById('checkoutModal').setAttribute('data-lang', lang);
+  };
+  window.closeCheckout = function() {
+    document.getElementById('checkoutModal').classList.remove('open');
+  };
+  window.submitOrder = function() {
+    var order = {
+      id: Date.now(),
+      pkg: currentPkg,
+      pkgName: PKG_NAMES[currentPkg],
+      currency: getCurrency(),
+      name: document.getElementById('orderName').value,
+      company: document.getElementById('orderCompany').value,
+      email: document.getElementById('orderEmail').value,
+      phone: document.getElementById('orderPhone').value,
+      notes: document.getElementById('orderNotes').value,
+      status: 'new',
+      date: new Date().toISOString()
+    };
+    if (!order.name || !order.phone) { alert(page.getAttribute('data-lang')==='ar'?'الاسم والموبايل مطلوبين':'Name and phone are required'); return; }
+    var orders = [];
+    try { orders = JSON.parse(localStorage.getItem('yds_orders')) || []; } catch(e){}
+    orders.unshift(order);
+    localStorage.setItem('yds_orders', JSON.stringify(orders));
+    document.getElementById('checkoutForm').style.display = 'none';
+    document.getElementById('checkoutSuccess').style.display = '';
+    document.getElementById('orderName').value='';
+    document.getElementById('orderCompany').value='';
+    document.getElementById('orderEmail').value='';
+    document.getElementById('orderPhone').value='';
+    document.getElementById('orderNotes').value='';
+  };
+  document.getElementById('checkoutModal').addEventListener('click', function(e) { if(e.target===this) closeCheckout(); });
+
+  // Reveal
+  var obs = new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('visible');});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
 })();
 </script>

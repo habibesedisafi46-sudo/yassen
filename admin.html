@@ -1,0 +1,382 @@
+<title>YDS Admin</title>
+<style>
+:root {
+  --bg: #0A0A0A; --bg2: #111111; --card: #151515; --border: #292929;
+  --text: #FFFFFF; --text2: #D5D5D5; --muted: #A0A0A0; --dim: #555555;
+  --hover: #1A1A1A; --input-bg: #111111; --danger: #C44; --success: #4A4;
+  --radius: 6px; --tr: 0.25s ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea, select { font-family: inherit; font-size: inherit; }
+.hidden { display: none !important; }
+
+/* ── LOGIN ── */
+.login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+.login-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 32px; width: 100%; max-width: 360px; text-align: center; }
+.login-box h2 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.login-box p { font-size: 12px; color: var(--dim); margin-bottom: 20px; }
+.login-box input { display: block; width: 100%; padding: 10px 14px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--input-bg); color: var(--text); outline: none; }
+.login-box input:focus { border-color: var(--dim); }
+.login-btn { display: block; width: 100%; padding: 11px; border: 1px solid var(--text); color: var(--text); background: transparent; border-radius: var(--radius); font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background var(--tr); }
+.login-btn:hover { background: var(--hover); }
+.login-error { font-size: 12px; color: var(--danger); margin-top: 10px; }
+
+/* ── LAYOUT ── */
+.app { display: flex; min-height: 100vh; }
+.sidebar { width: 220px; background: var(--bg2); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
+.sidebar-brand { padding: 20px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.sidebar-brand svg { width: 22px; height: 28px; }
+.sidebar-brand-text { line-height: 1; }
+.sidebar-brand-yds { font-size: 16px; font-weight: 700; letter-spacing: 0.06em; }
+.sidebar-brand-sub { font-size: 7px; font-weight: 600; letter-spacing: 0.3em; color: var(--dim); margin-top: 1px; display: block; }
+.sidebar-nav { flex: 1; padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; }
+.sidebar-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius); font-size: 13px; color: var(--muted); transition: background var(--tr), color var(--tr); }
+.sidebar-link:hover { background: var(--hover); color: var(--text); }
+.sidebar-link.active { background: var(--hover); color: var(--text); font-weight: 600; }
+.sidebar-link svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; flex-shrink: 0; }
+.sidebar-badge { margin-left: auto; background: var(--text); color: var(--bg); font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 10px; }
+.sidebar-footer { padding: 12px 16px; border-top: 1px solid var(--border); }
+.sidebar-logout { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--dim); cursor: pointer; }
+.sidebar-logout:hover { color: var(--text); }
+.sidebar-logout svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.main { flex: 1; margin-left: 220px; padding: 0; }
+.main-header { padding: 18px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.main-header h1 { font-size: 18px; font-weight: 700; }
+.main-header-links { display: flex; gap: 10px; }
+.main-header-links a { font-size: 12px; color: var(--muted); border: 1px solid var(--border); padding: 6px 12px; border-radius: var(--radius); transition: color var(--tr), border-color var(--tr); }
+.main-header-links a:hover { color: var(--text); border-color: var(--dim); }
+.main-body { padding: 28px; }
+
+/* ── TABS / PAGE ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── STATS ROW ── */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+.stat-card-label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.stat-card-value { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat-card-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ── TABLES ── */
+.table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.table-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.table-head h3 { font-size: 14px; font-weight: 600; }
+.table-actions { display: flex; gap: 8px; }
+.tbl-btn { padding: 6px 14px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); transition: border-color var(--tr), color var(--tr); background: transparent; }
+.tbl-btn:hover { border-color: var(--dim); color: var(--text); }
+.tbl-btn.danger { color: var(--danger); border-color: var(--danger); }
+.tbl-btn.danger:hover { background: rgba(200,68,68,0.1); }
+.table-body { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--dim); border-bottom: 1px solid var(--border); white-space: nowrap; }
+tbody td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--hover); }
+.status { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.status-new { background: rgba(255,255,255,0.1); color: var(--text); }
+.status-confirmed { background: rgba(74,170,74,0.15); color: var(--success); }
+.status-completed { background: rgba(74,170,74,0.08); color: var(--dim); }
+.status-cancelled { background: rgba(200,68,68,0.1); color: var(--danger); }
+.empty-state { text-align: center; padding: 48px 20px; color: var(--dim); }
+.empty-state svg { width: 36px; height: 36px; stroke: var(--dim); fill: none; stroke-width: 1.2; margin-bottom: 10px; }
+.empty-state p { font-size: 13px; }
+
+/* ── PRICES EDITOR ── */
+.price-editor { display: grid; gap: 16px; }
+.price-pkg { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.price-pkg-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.price-pkg-name { font-size: 15px; font-weight: 700; text-transform: uppercase; }
+.price-pkg-dur { font-size: 11px; color: var(--dim); }
+.price-currencies { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.price-field label { display: block; font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.price-field input { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--input-bg); color: var(--text); outline: none; font-variant-numeric: tabular-nums; }
+.price-field input:focus { border-color: var(--dim); }
+.save-prices-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; border: 1px solid var(--text); color: var(--text); background: transparent; border-radius: var(--radius); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: background var(--tr); margin-top: 8px; }
+.save-prices-btn:hover { background: var(--hover); }
+.save-msg { display: inline-block; margin-left: 12px; font-size: 12px; color: var(--success); opacity: 0; transition: opacity 0.3s; }
+.save-msg.show { opacity: 1; }
+
+/* ── SETTINGS ── */
+.settings-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; max-width: 500px; margin-bottom: 16px; }
+.settings-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 14px; }
+.settings-card label { display: block; font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.settings-card input { display: block; width: 100%; padding: 9px 12px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--input-bg); color: var(--text); outline: none; }
+.settings-card input:focus { border-color: var(--dim); }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .sidebar { width: 56px; }
+  .sidebar-brand-text, .sidebar-link span, .sidebar-badge, .sidebar-footer span { display: none; }
+  .sidebar-link { justify-content: center; padding: 12px; }
+  .main { margin-left: 56px; }
+  .main-body { padding: 16px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .price-currencies { grid-template-columns: repeat(2, 1fr); }
+  .main-header { padding: 14px 16px; }
+}
+</style>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <h2>YDS Admin</h2>
+    <p>Enter your password to continue</p>
+    <input type="password" id="loginPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Login</button>
+    <div class="login-error hidden" id="loginError">Incorrect password</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="app hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg viewBox="0 0 220 290" fill="none"><path d="M110,130 L15,6 L58,4 L110,115Z" fill="#aaa"/><path d="M110,130 L58,4 L90,24 L110,115Z" fill="#444"/><path d="M110,130 L205,6 L162,4 L110,115Z" fill="#aaa"/><path d="M110,130 L162,4 L130,24 L110,115Z" fill="#444"/><path d="M110,130 C106,165 96,210 82,280 L100,283 C106,218 109,168 110,130Z" fill="#888"/><path d="M110,130 C109,168 106,218 100,283 L120,280 C114,218 112,168 110,130Z" fill="#333"/></svg>
+      <div class="sidebar-brand-text"><span class="sidebar-brand-yds">YDS</span><span class="sidebar-brand-sub">ADMIN</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="sidebar-link active" data-page="orders" onclick="showPage('orders')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>Orders</span>
+        <span class="sidebar-badge" id="orderCount">0</span>
+      </a>
+      <a class="sidebar-link" data-page="prices" onclick="showPage('prices')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>Prices</span>
+      </a>
+      <a class="sidebar-link" data-page="settings" onclick="showPage('settings')">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" onclick="doLogout()">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="main-header">
+      <h1 id="pageTitle">Orders</h1>
+      <div class="main-header-links">
+        <a href="index.html">Website</a>
+        <a href="yds-shop.html">Shop</a>
+      </div>
+    </header>
+    <div class="main-body">
+
+      <!-- ORDERS PAGE -->
+      <div class="page active" id="page-orders">
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-card-label">Total Orders</div><div class="stat-card-value" id="statTotal">0</div></div>
+          <div class="stat-card"><div class="stat-card-label">New</div><div class="stat-card-value" id="statNew">0</div></div>
+          <div class="stat-card"><div class="stat-card-label">Confirmed</div><div class="stat-card-value" id="statConfirmed">0</div></div>
+          <div class="stat-card"><div class="stat-card-label">Completed</div><div class="stat-card-value" id="statCompleted">0</div></div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-head">
+            <h3>All Orders</h3>
+            <div class="table-actions">
+              <button class="tbl-btn danger" onclick="clearAllOrders()">Clear All</button>
+            </div>
+          </div>
+          <div class="table-body" id="ordersTable"></div>
+        </div>
+      </div>
+
+      <!-- PRICES PAGE -->
+      <div class="page" id="page-prices">
+        <div class="price-editor" id="priceEditor"></div>
+        <div style="margin-top:16px">
+          <button class="save-prices-btn" onclick="savePrices()">Save Prices</button>
+          <span class="save-msg" id="saveMsg">Saved!</span>
+        </div>
+      </div>
+
+      <!-- SETTINGS PAGE -->
+      <div class="page" id="page-settings">
+        <div class="settings-card">
+          <h3>Change Password</h3>
+          <label>Current Password</label>
+          <input type="password" id="settingsCurrent" placeholder="Current password">
+          <label>New Password</label>
+          <input type="password" id="settingsNew" placeholder="New password">
+          <label>Confirm New Password</label>
+          <input type="password" id="settingsConfirm" placeholder="Confirm new password">
+          <button class="save-prices-btn" onclick="changePassword()">Update Password</button>
+          <span class="save-msg" id="passMsg"></span>
+        </div>
+        <div class="settings-card">
+          <h3>Export Data</h3>
+          <p style="font-size:12px;color:var(--dim);margin-bottom:12px">Download all orders and prices as JSON.</p>
+          <button class="save-prices-btn" onclick="exportData()">Export JSON</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var PKGS = [
+    { key:'starter', name:'Starter', nameAr:'البداية', dur:'14 Days' },
+    { key:'basic', name:'Basic', nameAr:'الأساسية', dur:'30 Days' },
+    { key:'growth', name:'Growth', nameAr:'النمو', dur:'30 Days' },
+    { key:'pro', name:'Pro', nameAr:'الاحتراف', dur:'60 Days' },
+    { key:'business', name:'Business', nameAr:'الأعمال', dur:'90 Days' }
+  ];
+  var CURRENCIES = ['EGP','USD','SAR','AED','EUR'];
+  var DEFAULT_PASS = 'admin123';
+
+  function getPass(){ return localStorage.getItem('yds_admin_pass') || DEFAULT_PASS; }
+  function getOrders(){ try { return JSON.parse(localStorage.getItem('yds_orders')) || []; } catch(e){ return []; } }
+  function getPrices(){ try { return JSON.parse(localStorage.getItem('yds_prices')) || {}; } catch(e){ return {}; } }
+
+  // Login
+  window.doLogin = function(){
+    var v = document.getElementById('loginPass').value;
+    if(v === getPass()){
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+      sessionStorage.setItem('yds_logged','1');
+      renderOrders();
+      renderPrices();
+    } else {
+      document.getElementById('loginError').classList.remove('hidden');
+    }
+  };
+  window.doLogout = function(){
+    sessionStorage.removeItem('yds_logged');
+    document.getElementById('app').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('loginPass').value='';
+    document.getElementById('loginError').classList.add('hidden');
+  };
+  if(sessionStorage.getItem('yds_logged')==='1'){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+  }
+
+  // Navigation
+  window.showPage = function(p){
+    document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+    document.getElementById('page-'+p).classList.add('active');
+    document.querySelectorAll('.sidebar-link').forEach(function(l){l.classList.toggle('active',l.getAttribute('data-page')===p);});
+    document.getElementById('pageTitle').textContent = p.charAt(0).toUpperCase()+p.slice(1);
+  };
+
+  // Orders
+  function renderOrders(){
+    var orders = getOrders();
+    var newC=0,confC=0,compC=0;
+    orders.forEach(function(o){if(o.status==='new')newC++;if(o.status==='confirmed')confC++;if(o.status==='completed')compC++;});
+    document.getElementById('statTotal').textContent = orders.length;
+    document.getElementById('statNew').textContent = newC;
+    document.getElementById('statConfirmed').textContent = confC;
+    document.getElementById('statCompleted').textContent = compC;
+    document.getElementById('orderCount').textContent = newC;
+
+    if(!orders.length){
+      document.getElementById('ordersTable').innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><p>No orders yet</p></div>';
+      return;
+    }
+    var h = '<table><thead><tr><th>#</th><th>Package</th><th>Name</th><th>Phone</th><th>Email</th><th>Company</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody>';
+    orders.forEach(function(o,i){
+      var d = new Date(o.date);
+      var ds = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+      h += '<tr><td>'+(i+1)+'</td><td style="font-weight:600;text-transform:uppercase">'+esc(o.pkgName||o.pkg)+'</td><td>'+esc(o.name)+'</td><td>'+esc(o.phone)+'</td><td>'+esc(o.email||'—')+'</td><td>'+esc(o.company||'—')+'</td><td style="white-space:nowrap">'+ds+'</td><td><span class="status status-'+o.status+'">'+o.status+'</span></td><td><select onchange="updateStatus('+o.id+',this.value)" style="background:var(--input-bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:11px;outline:none"><option value="new"'+(o.status==='new'?' selected':'')+'>New</option><option value="confirmed"'+(o.status==='confirmed'?' selected':'')+'>Confirmed</option><option value="completed"'+(o.status==='completed'?' selected':'')+'>Completed</option><option value="cancelled"'+(o.status==='cancelled'?' selected':'')+'>Cancelled</option></select></td></tr>';
+    });
+    h += '</tbody></table>';
+    document.getElementById('ordersTable').innerHTML = h;
+  }
+  function esc(s){ if(!s) return ''; var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  window.updateStatus = function(id, status){
+    var orders = getOrders();
+    orders.forEach(function(o){if(o.id===id)o.status=status;});
+    localStorage.setItem('yds_orders', JSON.stringify(orders));
+    renderOrders();
+  };
+  window.clearAllOrders = function(){
+    if(!confirm('Delete all orders?')) return;
+    localStorage.removeItem('yds_orders');
+    renderOrders();
+  };
+
+  // Prices
+  function renderPrices(){
+    var prices = getPrices();
+    var h = '';
+    PKGS.forEach(function(p){
+      h += '<div class="price-pkg"><div class="price-pkg-head"><div><span class="price-pkg-name">'+p.name+'</span> <span style="color:var(--dim);font-size:13px">/ '+p.nameAr+'</span></div><div class="price-pkg-dur">'+p.dur+'</div></div><div class="price-currencies">';
+      CURRENCIES.forEach(function(c){
+        var v = prices[p.key] && prices[p.key][c] ? prices[p.key][c] : '';
+        h += '<div class="price-field"><label>'+c+'</label><input type="number" data-pkg="'+p.key+'" data-cur="'+c+'" value="'+v+'" placeholder="0"></div>';
+      });
+      h += '</div></div>';
+    });
+    document.getElementById('priceEditor').innerHTML = h;
+  }
+
+  window.savePrices = function(){
+    var prices = {};
+    document.querySelectorAll('#priceEditor input').forEach(function(inp){
+      var pkg = inp.getAttribute('data-pkg');
+      var cur = inp.getAttribute('data-cur');
+      if(!prices[pkg]) prices[pkg]={};
+      var v = parseFloat(inp.value);
+      if(!isNaN(v) && v > 0) prices[pkg][cur] = v;
+    });
+    localStorage.setItem('yds_prices', JSON.stringify(prices));
+    var msg = document.getElementById('saveMsg');
+    msg.textContent = 'Saved!';
+    msg.style.color = 'var(--success)';
+    msg.classList.add('show');
+    setTimeout(function(){ msg.classList.remove('show'); }, 2000);
+  };
+
+  // Settings
+  window.changePassword = function(){
+    var cur = document.getElementById('settingsCurrent').value;
+    var nw = document.getElementById('settingsNew').value;
+    var conf = document.getElementById('settingsConfirm').value;
+    var msg = document.getElementById('passMsg');
+    if(cur !== getPass()){ msg.textContent='Wrong current password'; msg.style.color='var(--danger)'; msg.classList.add('show'); return; }
+    if(nw.length < 4){ msg.textContent='Password too short'; msg.style.color='var(--danger)'; msg.classList.add('show'); return; }
+    if(nw !== conf){ msg.textContent='Passwords do not match'; msg.style.color='var(--danger)'; msg.classList.add('show'); return; }
+    localStorage.setItem('yds_admin_pass', nw);
+    msg.textContent = 'Password updated!';
+    msg.style.color = 'var(--success)';
+    msg.classList.add('show');
+    document.getElementById('settingsCurrent').value='';
+    document.getElementById('settingsNew').value='';
+    document.getElementById('settingsConfirm').value='';
+    setTimeout(function(){ msg.classList.remove('show'); }, 3000);
+  };
+
+  window.exportData = function(){
+    var data = { orders: getOrders(), prices: getPrices(), exportDate: new Date().toISOString() };
+    var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a'); a.href = url; a.download = 'yds-data-export.json'; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Init
+  renderOrders();
+  renderPrices();
+
+  // Live refresh every 5 seconds for new orders
+  setInterval(renderOrders, 5000);
+})();
+</script>
